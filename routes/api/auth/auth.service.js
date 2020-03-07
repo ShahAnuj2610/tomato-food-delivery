@@ -22,7 +22,6 @@ function isAuthenticated() {
       })
       // Attach user to request
       .use(function(req, res, next) {
-        console.log("after req", req);
         User.findById(req.user.id, function(err, user) {
           if (err) return next(err);
           if (!user) return res.send(401);
@@ -72,7 +71,7 @@ function isLocalStrategy() {
 /**
  * Returns a jwt token signed by the app secret
  */
-function signToken(id, role) {
+function signToken(id) {
   //return jwt.sign({ _id: id }, config.secretOrKey, { expiresInMinutes: 60*5 });
   return jwt.sign({ _id: id }, config.secretOrKey);
 }
@@ -85,7 +84,7 @@ function setTokenCookie(req, res) {
     return res.json(404, {
       message: "Something went wrong, please try again."
     });
-  const token = signToken(req.user._id, req.user.role);
+  const token = signToken(req.user._id);
   res.cookie("token", JSON.stringify(token));
   res.redirect("/");
 }

@@ -1,4 +1,5 @@
 const Restaurant = require("./restaurant.model");
+const Meal = require("../meal/meal.model");
 const _ = require("lodash");
 
 function handleError(res, err) {
@@ -17,23 +18,44 @@ exports.index = function(req, res) {
 
 // Get a single restaurant
 exports.show = function(req, res) {
-  Restaurant.findById(req.params.id, function(err, restaurant) {
-    if (err) {
-      return handleError(res, err);
-    }
-    if (!restaurant) {
-      return res.send(404);
-    }
-    return res.json(restaurant);
-  });
+  Restaurant.findById(req.params.id)
+    .populate("_meals")
+    .exec(function(err, restaurant) {
+      if (err) {
+        return handleError(res, err);
+      }
+
+      if (!restaurant) {
+        return res.send(404);
+      }
+
+      return res.json(restaurant);
+    });
 };
 
 exports.create = function(req, res) {
-  Restaurant.create(req.body, function(err, restaurant) {
+  Meal.create(req.body._meals, function(err) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(201, restaurant);
+    const _meals = [];
+
+    for (let i = 0; i < arguments[1].length; i++) {
+      _meals.push(arguments[1][i]._id);
+    }
+
+    const _restaurant = req.body;
+    _restaurant._meals = _meals;
+
+    Restaurant.create(_restaurant, function(err, restaurant) {
+      if (err) {
+        return handleError(res, err);
+      }
+
+      restaurant.populate();
+
+      return res.json(201, restaurant);
+    });
   });
 };
 
@@ -54,8 +76,6 @@ exports.update = function(req, res) {
       if (err) {
         return handleError(res, err);
       }
-
-      // IF restaurant.image !== updated.image, THEM REMOVE IMAGE FROM DISK
 
       return res.json(200, restaurant);
     });
