@@ -16,15 +16,15 @@ class Login extends Component {
   }
 
   componentDidMount() {
-    // If logged in and user navigates to Login page, should redirect them to dashboard
+    // If logged in and user navigates to Login page, should redirect them to restaurants
     if (this.props.auth.isAuthenticated) {
-      this.props.history.push("/dashboard");
+      this.props.history.push("/restaurants");
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.auth.isAuthenticated) {
-      this.props.history.push("/dashboard");
+      this.props.history.push("/restaurants");
     }
 
     if (nextProps.errors) {
@@ -136,7 +136,4 @@ const mapStateToProps = state => ({
   errors: state.errors
 });
 
-export default connect(
-  mapStateToProps,
-  { loginUser }
-)(Login);
+export default connect(mapStateToProps, { loginUser })(Login);

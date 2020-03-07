@@ -18,9 +18,9 @@ class Register extends Component {
   }
 
   componentDidMount() {
-    // If logged in and user navigates to Register page, should redirect them to dashboard
+    // If logged in and user navigates to Register page, should redirect them to restaurants
     if (this.props.auth.isAuthenticated) {
-      this.props.history.push("/dashboard");
+      this.props.history.push("/restaurants");
     }
   }
 
@@ -158,7 +158,4 @@ const mapStateToProps = state => ({
   errors: state.errors
 });
 
-export default connect(
-  mapStateToProps,
-  { registerUser }
-)(withRouter(Register));
+export default connect(mapStateToProps, { registerUser })(withRouter(Register));
