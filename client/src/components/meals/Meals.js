@@ -3,17 +3,16 @@ import get from "lodash/get";
 import axios from "axios";
 
 import { Loader } from "../Loader";
+import { MealCard } from "./MealCard";
+import { OrderFooter } from "./OrderFooter";
 
 class Meals extends Component {
-  state = { meals: [], loading: false };
+  state = { meals: [], loading: false, submitting: false };
 
   async componentDidMount() {
-    console.log("this props", this.props);
     try {
       this.setState({ loading: true });
-      const response = await axios(
-        `/api/restaurants/${get(this.props.match, "params.id")}`
-      );
+      const response = await axios(`/api/restaurants/${this.restaurantId}`);
       this.setState({ meals: response.data._meals, loading: false });
     } catch (e) {
       console.error(e);
@@ -21,25 +20,93 @@ class Meals extends Component {
     }
   }
 
+  onIncrement = index => {
+    const { meals } = this.state;
+    const { total } = meals[index];
+    this.setState({
+      meals: [
+        ...meals.slice(0, index),
+        { ...meals[index], total: (total || 0) + 1 },
+        ...meals.slice(index + 1)
+      ]
+    });
+  };
+
+  onDecrement = index => {
+    const { meals } = this.state;
+    const { total } = meals[index];
+    if (!total) return;
+    this.setState({
+      meals: [
+        ...meals.slice(0, index),
+        { ...meals[index], total: total - 1 },
+        ...meals.slice(index + 1)
+      ]
+    });
+  };
+
+  handleSubmit = async () => {
+    const payload = {
+      total_amount: this.orderTotal,
+      _restaurant: this.restaurantId,
+      _meals: []
+    };
+    this.state.meals.forEach(meal => {
+      payload._meals.push(meal._id);
+    });
+    this.setState({ submitting: true });
+    try {
+      await axios.post("/api/orders", payload);
+      const { goBack } = this.props.history;
+      goBack();
+    } catch (e) {
+      this.setState({ submitting: false });
+      console.error(e);
+    }
+  };
+
+  get restaurantId() {
+    return get(this.props.match, "params.id");
+  }
+
+  get orderTotal() {
+    return this.state.meals.reduce((total, meal) => {
+      return total + meal.price * (meal.total || 0);
+    }, 0);
+  }
+
   render() {
-    const { loading, meals } = this.state;
+    const { loading, meals, submitting } = this.state;
+
+    if (meals.length === 0 && !loading)
+      return <div className="center">No Meals Found.</div>;
 
     return (
-      <div className="container valign-wrapper">
+      <div className="container">
         <div className="row">
-          <div className="landing-copy col s12 center-align">
-            {loading ? (
-              <Loader />
-            ) : (
-              <ul className="collection">
-                {meals.map(meal => (
-                  <li key={meal.name} className="collection-item">
-                    {meal.name}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
+          {loading ? (
+            <Loader />
+          ) : (
+            <footer className="page-footer">
+              <div className="container">
+                <div className="row">
+                  {meals.map((meal, index) => (
+                    <MealCard
+                      key={meal.name}
+                      meal={meal}
+                      onItemAdd={() => this.onIncrement(index)}
+                      onItemRemove={() => this.onDecrement(index)}
+                    />
+                  ))}
+                </div>
+                <OrderFooter
+                  orderTotal={this.orderTotal}
+                  disabled={submitting}
+                  onSubmit={this.handleSubmit}
+                />
+              </div>
+            </footer>
+          )}
         </div>
       </div>
     );

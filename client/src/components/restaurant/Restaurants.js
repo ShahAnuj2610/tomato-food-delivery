@@ -21,8 +21,11 @@ class Restaurants extends Component {
   render() {
     const { loading, restaurants } = this.state;
 
+    if (restaurants.length === 0 && !loading)
+      return <div className="center">No Restaurants Found.</div>;
+
     return (
-      <div className="container valign-wrapper">
+      <div className="container" style={{ width: "100%" }}>
         <div className="row">
           <div className="landing-copy col s12 center-align">
             {loading ? (
