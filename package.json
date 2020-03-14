@@ -8,7 +8,8 @@
     "start": "node server.js",
     "server": "nodemon server.js",
     "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "test": "mocha --timeout 10000"
   },
   "author": "",
   "license": "MIT",
@@ -23,12 +24,15 @@
     "javascript-state-machine": "^3.1.0",
     "jsonwebtoken": "^8.3.0",
     "lodash": "^4.17.15",
-    "mocha": "^7.1.0",
     "mongoose": "^5.3.11",
     "nodemon": "^2.0.2",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
-    "supertest": "^4.0.2",
     "validator": "^10.9.0"
+  },
+  "devDependencies": {
+    "mocha": "^7.1.0",
+    "should": "^13.2.3",
+    "supertest": "^4.0.2"
   }
 }
