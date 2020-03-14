@@ -57,8 +57,8 @@ class Meals extends Component {
     this.setState({ submitting: true });
     try {
       await axios.post("/api/orders", payload);
-      const { goBack } = this.props.history;
-      goBack();
+      const { push } = this.props.history;
+      push("/orders");
     } catch (e) {
       this.setState({ submitting: false });
       console.error(e);
@@ -90,9 +90,9 @@ class Meals extends Component {
             <footer className="page-footer">
               <div className="container">
                 <div className="row">
-                  {meals.map((meal, index) => (
+                  {(meals || []).map((meal, index) => (
                     <MealCard
-                      key={meal.name}
+                      key={get(meal, "name")}
                       meal={meal}
                       onItemAdd={() => this.onIncrement(index)}
                       onItemRemove={() => this.onDecrement(index)}

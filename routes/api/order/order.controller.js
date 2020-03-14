@@ -7,12 +7,27 @@ function handleError(res, err) {
 
 // Get list of orders
 exports.index = function(req, res) {
-  Order.find(function(err, orders) {
-    if (err) {
-      return handleError(res, err);
-    }
-    return res.json(200, orders);
-  });
+  Order.find({ _user: req.user._id })
+    .sort("-created_at")
+    .populate("_restaurant")
+    .exec(function(err, orders) {
+      if (err) {
+        return handleError(res, err);
+      }
+      return res.json(200, orders);
+    });
+};
+
+// Get list of restaurant orders
+exports.restaurant_index = function(req, res) {
+  Order.find({ _restaurant: req.user._id })
+    .populate("_restaurant")
+    .exec(function(err, orders) {
+      if (err) {
+        return handleError(res, err);
+      }
+      return res.json(200, orders);
+    });
 };
 
 // Get a single order
