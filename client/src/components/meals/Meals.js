@@ -52,7 +52,7 @@ class Meals extends Component {
       _meals: []
     };
     this.state.meals.forEach(meal => {
-      payload._meals.push(meal._id);
+      if (meal.total) payload._meals.push(meal._id);
     });
     this.setState({ submitting: true });
     try {

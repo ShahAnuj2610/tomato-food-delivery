@@ -11,7 +11,7 @@ export function OrderCard(props) {
           <p>{description}</p>
         </div>
         <div className="card-panel teal lighten-2">
-          <div>Status: {status}</div>
+          <div style={{ fontWeight: 500 }}>Status: {status}</div>
           <div style={{ fontWeight: 700 }}>Total amt: {total_amount}</div>
         </div>
       </div>
