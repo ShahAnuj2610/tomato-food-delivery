@@ -1,5 +1,19 @@
 const Order = require("./order.model");
 const _ = require("lodash");
+const StateMachine = require("javascript-state-machine");
+
+function createStateMachine(order) {
+  return new StateMachine({
+    init: order.status,
+    transitions: [
+      { name: "cancelled", from: "placed", to: "cancelled" },
+      { name: "processing", from: "placed", to: "processing" },
+      { name: "in_route", from: "processing", to: "in_route" },
+      { name: "delivered", from: "in_route", to: "delivered" },
+      { name: "received", from: "delivered", to: "received" }
+    ]
+  });
+}
 
 function handleError(res, err) {
   return res.send(500, err);
@@ -73,6 +87,11 @@ exports.update = function(req, res) {
     if (!order) {
       return res.send(404);
     }
+    const fsm = createStateMachine(order);
+    if (fsm.cannot(req.body.status))
+      return res.status(403).json({
+        status: `Not a valid transition from ${order.status} to ${req.body.status}.`
+      });
     const updated = _.merge(order, req.body);
     updated.save(function(err) {
       if (err) {
