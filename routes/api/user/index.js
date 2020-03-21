@@ -1,8 +1,11 @@
 const controller = require("./user.controller");
 
 const express = require("express");
+const auth = require("../auth/auth.service");
 const router = express.Router();
 
+// get user
+router.get("/", auth.hasRole("user"), controller.show);
 // @route POST api/users/register
 // @desc Register user
 // @access Public

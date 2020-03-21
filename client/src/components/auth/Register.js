@@ -13,7 +13,8 @@ class Register extends Component {
       email: "",
       password: "",
       password2: "",
-      errors: {}
+      errors: {},
+      role: "user"
     };
   }
 
@@ -39,19 +40,25 @@ class Register extends Component {
   onSubmit = e => {
     e.preventDefault();
 
+    const { password, role, password2, email, name } = this.state;
     const newUser = {
-      name: this.state.name,
-      email: this.state.email,
-      password: this.state.password,
-      password2: this.state.password2
+      name: name,
+      email: email,
+      password: password,
+      password2: password2,
+      role: role
     };
 
-    this.props.registerUser(newUser, this.props.history);
+    const { history, registerUser: registerUserAction } = this.props;
+    registerUserAction(newUser, history);
+  };
+
+  onCheckboxChange = e => {
+    this.setState({ role: e.target.checked ? "manager" : "user" });
   };
 
   render() {
-    const { errors } = this.state;
-
+    const { password, role, password2, email, name, errors } = this.state;
     return (
       <div className="container">
         <div className="row">
@@ -72,7 +79,7 @@ class Register extends Component {
               <div className="input-field col s12">
                 <input
                   onChange={this.onChange}
-                  value={this.state.name}
+                  value={name}
                   error={errors.name}
                   id="name"
                   type="text"
@@ -86,7 +93,7 @@ class Register extends Component {
               <div className="input-field col s12">
                 <input
                   onChange={this.onChange}
-                  value={this.state.email}
+                  value={email}
                   error={errors.email}
                   id="email"
                   type="email"
@@ -100,7 +107,7 @@ class Register extends Component {
               <div className="input-field col s12">
                 <input
                   onChange={this.onChange}
-                  value={this.state.password}
+                  value={password}
                   error={errors.password}
                   id="password"
                   type="password"
@@ -114,7 +121,7 @@ class Register extends Component {
               <div className="input-field col s12">
                 <input
                   onChange={this.onChange}
-                  value={this.state.password2}
+                  value={password2}
                   error={errors.password2}
                   id="password2"
                   type="password"
@@ -125,6 +132,22 @@ class Register extends Component {
                 <label htmlFor="password2">Confirm Password</label>
                 <span className="red-text">{errors.password2}</span>
               </div>
+
+              <label style={{ margin: 15 }} htmlFor="role">
+                <input
+                  onChange={this.onCheckboxChange}
+                  value={role === "manager"}
+                  error={errors.role}
+                  id="role"
+                  type="checkbox"
+                  className={classnames("", {
+                    invalid: errors.role
+                  })}
+                />
+                <span> Is Restaurant Manager</span>
+              </label>
+              <span className="red-text">{errors.role}</span>
+
               <div className="col s12" style={{ paddingLeft: "11.250px" }}>
                 <button
                   style={{

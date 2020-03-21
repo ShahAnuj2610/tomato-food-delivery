@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 import "./index.css";
 
-class Navbar extends Component {
+class NavBar extends Component {
   onLogoutClick = e => {
     e.preventDefault();
     this.props.logoutUser();
@@ -24,6 +24,12 @@ class Navbar extends Component {
                 id="nav-mobile"
                 className="right hide-on-med-and-down list-margin"
               >
+                <li>
+                  <Link to="/restaurants/create">
+                    Create Restaurants And Meals
+                  </Link>
+                </li>
+
                 <li>
                   <Link to="/restaurants">All Restaurants</Link>
                 </li>
@@ -50,4 +56,4 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps, { logoutUser })(Navbar);
+export default connect(mapStateToProps, { logoutUser })(NavBar);

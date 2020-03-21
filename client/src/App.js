@@ -17,6 +17,7 @@ import Restaurants from "./components/restaurant/Restaurants";
 import "./App.css";
 import Meals from "./components/meals/Meals";
 import Orders from "./components/orders/Orders";
+import CreateRestaurant from "./components/restaurant/CreateRestaurant";
 
 // Check for token to keep user logged in
 if (localStorage.jwtToken) {
@@ -49,6 +50,11 @@ class App extends Component {
             <Route exact path="/login" component={Login} />
             <Switch>
               <PrivateRoute exact path="/restaurants" component={Restaurants} />
+              <PrivateRoute
+                exact
+                path="/restaurants/create"
+                component={CreateRestaurant}
+              />
               <PrivateRoute exact path="/restaurants/:id" component={Meals} />
               <PrivateRoute exact path="/orders" component={Orders} />
             </Switch>
