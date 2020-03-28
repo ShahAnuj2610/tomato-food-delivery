@@ -34,13 +34,13 @@ npm run dev
 
 ### Create Restaurant (Role: Manager)
 
-![manager-login](https://recordit.co/CZ2wDzk7O4)
+![manager-login](https://recordit.co/CZ2wDzk7O4.gif)
 
 ### Order Food (Role: User)
 
 Let's order food from the above restaurant.
 
-![user-login](http://g.recordit.co/lFgzrDYcxY)
+![user-login](http://g.recordit.co/lFgzrDYcxY.gif)
 
 ## Configuration
 
