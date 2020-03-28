@@ -1,18 +1,5 @@
 {
-  "name": "food-delivery",
-  "version": "1.0.0",
-  "description": "Food Delivery SPA",
-  "main": "server.js",
-  "scripts": {
-    "client-install": "npm install --prefix client",
-    "start": "node server.js",
-    "server": "nodemon server.js",
-    "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "test": "mocha --timeout 10000"
-  },
-  "author": "",
-  "license": "MIT",
+  "author": "Anuj Shah <anujshah584@gmail.com>",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
@@ -30,9 +17,26 @@
     "passport-jwt": "^4.0.0",
     "validator": "^10.9.0"
   },
+  "description": "Full Stack Food Delivery SPA",
   "devDependencies": {
     "mocha": "^7.1.1",
     "should": "^13.2.3",
     "supertest": "^4.0.2"
-  }
+  },
+  "license": "MIT",
+  "main": "server.js",
+  "name": "food-delivery",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ShahAnuj2610/tomato-food-delivery.git"
+  },
+  "scripts": {
+    "client-install": "npm install --prefix client",
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "test": "mocha --timeout 10000"
+  },
+  "version": "1.0.0"
 }

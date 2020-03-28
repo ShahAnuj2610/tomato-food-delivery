@@ -27,10 +27,12 @@ exports.registerUser = (req, res) => {
     if (user) {
       return res.status(400).json({ email: "Email already exists" });
     } else {
+      const { password, role, email, name } = req.body;
       const newUser = new User({
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password
+        name,
+        email,
+        password,
+        role
       });
 
       // Hash password before saving in database
