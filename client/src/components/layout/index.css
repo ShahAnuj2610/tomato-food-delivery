@@ -1,3 +1,13 @@
 .list-margin li {
   margin-right: 10px;
 }
+
+.show-on-med-and-down {
+  display: none;
+}
+
+@media only screen and (max-width: 992px) {
+  .show-on-med-and-down {
+    display: block;
+  }
+}
